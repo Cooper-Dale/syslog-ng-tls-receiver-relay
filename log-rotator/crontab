@@ -1,0 +1,3 @@
+# Spustit každý den ve 3:05 ráno
+# Maže soubory .log v adresáři /var/log/remote, které jsou starší než 30 dní
+5 3 * * * find /var/log/remote -type f -mtime +30 -name "*.log" -delete

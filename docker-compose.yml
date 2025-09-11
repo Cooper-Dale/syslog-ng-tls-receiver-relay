@@ -1,0 +1,34 @@
+services:
+  syslog-ng-tls-receiver:
+    build: .
+    container_name: syslog-ng-tls
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Prague
+      - SERVER_HOSTNAME=${HOSTNAME:-localhost}
+    volumes:
+      - ./config:/config
+      - ./certs:/certs
+      - syslog-logs:/var/log
+    ports:
+      - "6514:6514"
+    restart: unless-stopped
+    networks:
+      - syslog-net
+
+  log-rotator:
+    build: ./log-rotator
+    container_name: syslog-ng-log-rotator
+    init: true
+    restart: unless-stopped
+    volumes:
+      - syslog-logs:/var/log
+    networks:
+      - syslog-net
+
+volumes:
+  syslog-logs:
+networks:
+  syslog-net:
+    driver: bridge
