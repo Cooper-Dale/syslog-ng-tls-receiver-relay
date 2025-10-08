@@ -12,6 +12,7 @@ services:
       - ./certs:/certs
       - syslog-logs:/var/log
     ports:
+      - "5514:5514"
       - "6514:6514"
     restart: unless-stopped
     networks:
@@ -21,6 +22,8 @@ services:
     build: ./log-rotator
     container_name: syslog-ng-log-rotator
     init: true
+    environment:
+      - TZ=Europe/Prague
     restart: unless-stopped
     volumes:
       - syslog-logs:/var/log
